@@ -18,7 +18,7 @@ This project demonstrates an application example using RAH (Real-time Applicatio
 
 The CORDIC-based implementation allows users to compute the following functions efficiently on FPGA:
 
-1. **Trigonometric Functions**: Computes sin, cos, arcsin, and arccos.
+1. **Trigonometric Functions**: Computes sin, cos, arcsin, arccos, and arctan.
 2. **Hyperbolic Functions**: Computes sinh, cosh, and tanh.
 3. **Logarithmic and Exponential**: Computes ln and exp.
 4. **Square Root**: Computes sqrt.
@@ -37,8 +37,6 @@ RAH is a protocol developed by Vicharak to facilitate efficient data transfer be
    - The RAH Services encapsulate this data and send it back to the CPU.
    - The CPU decodes the frame and extracts the computed results.
 
-This structured communication ensures an efficient and organized transfer of data between the CPU and FPGA, making real-time computations feasible.
-
 ## FPGA User Guide
 
 ### Input Frame Format
@@ -52,6 +50,14 @@ The FPGA receives input frames via the RAH communication interface. The input fr
 
   ![image](images/Input_data_frame_structure.svg)
 
+#### Special Case: Arctan Function
+For the **arctan** function, **two input frames** are required, as it involves two input values instead of one.
+The RAH protocol ensures that these frames are sent sequentially and processed accordingly by the FPGA.
+
+#### Example
+```sh
+Input packet: 00 08 00 01 00 00 00 08 00 00 00 00
+```
 - **Mode Selection**:
   - **Mode 1**: Computes Sin and Cos
   - **Mode 2**: Computes Hyperbolic Sine (sinh) and Hyperbolic Cosine (cosh)
@@ -60,8 +66,7 @@ The FPGA receives input frames via the RAH communication interface. The input fr
   - **Mode 5**: Computes Exponential (exp)
   - **Mode 6**: Computes Natural Logarithm (ln)
   - **Mode 7**: Computes Square Root (sqrt)
-
-Using the RAH communication terminal, users can send up to 3KB of data at once to the FPGA, allowing for batch processing of multiple computations.
+  - **Mode 8**: Computes Arctan
 
 ### Output Frame Format
 As per the design, the output frame received on the terminal (through RAH communication) follows this format:
@@ -84,4 +89,3 @@ As per the design, the output frame received on the terminal (through RAH commun
 
 ## Conclusion
 This project showcases an efficient implementation of the CORDIC algorithm on FPGA using Verilog, integrated with RAH for seamless communication between the CPU and FPGA. The design supports a range of mathematical functions, making it a versatile solution for hardware-accelerated computing applications.
-
