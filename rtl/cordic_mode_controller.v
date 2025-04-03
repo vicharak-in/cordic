@@ -327,3 +327,4 @@ cordic_arctan arctan(
 );
 
 endmodule
+
