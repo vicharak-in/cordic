@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- Copyright (C) 2013-2023 Efinix Inc. All rights reserved.              
+-- Copyright (C) 2013-2024 Efinix Inc. All rights reserved.              
 --
 -- This   document  contains  proprietary information  which   is        
 -- protected by  copyright. All rights  are reserved.  This notice       
@@ -37,32 +37,35 @@
 --
 --------------------------------------------------------------------------------
 ------------- Begin Cut here for COMPONENT Declaration ------
-COMPONENT cordic_arcsin_arccos is
-PORT (
-clk : in std_logic;
-reset_n : in std_logic;
-i_call : in std_logic;
-i_data : in std_logic_vector(31 downto 0);
-o_done : out std_logic;
-o_arccos : out std_logic_vector(31 downto 0);
-o_arcsin : out std_logic_vector(31 downto 0);
-o_deg : out std_logic_vector(31 downto 0);
-o_y : out std_logic_vector(31 downto 0);
-o_x : out std_logic_vector(31 downto 0));
-END COMPONENT;
----------------------- End COMPONENT Declaration ------------
+component cordic_arcsin_arccos is
+port (
+    clk : in std_logic;
+    reset_n : in std_logic;
+    i_call : in std_logic;
+    i_data : in std_logic_vector(31 downto 0);
+    o_done : out std_logic;
+    o_arccos : out std_logic_vector(31 downto 0);
+    o_arcsin : out std_logic_vector(31 downto 0);
+    o_deg : out std_logic_vector(31 downto 0);
+    o_y : out std_logic_vector(31 downto 0);
+    o_x : out std_logic_vector(31 downto 0)
+);
+end component cordic_arcsin_arccos;
 
+---------------------- End COMPONENT Declaration ------------
 ------------- Begin Cut here for INSTANTIATION Template -----
 u_cordic_arcsin_arccos : cordic_arcsin_arccos
-PORT MAP (
-clk => clk,
-reset_n => reset_n,
-i_call => i_call,
-i_data => i_data,
-o_done => o_done,
-o_arccos => o_arccos,
-o_arcsin => o_arcsin,
-o_deg => o_deg,
-o_y => o_y,
-o_x => o_x);
+port map (
+    clk => clk,
+    reset_n => reset_n,
+    i_call => i_call,
+    i_data => i_data,
+    o_done => o_done,
+    o_arccos => o_arccos,
+    o_arcsin => o_arcsin,
+    o_deg => o_deg,
+    o_y => o_y,
+    o_x => o_x
+);
+
 ------------------------ End INSTANTIATION Template ---------

@@ -48,14 +48,17 @@ The RAH protocol ensures that these frames are sent sequentially and processed a
 Input packet: 00 08 00 01 00 00 00 08 00 00 00 00
 ```
 - **Mode Selection**:
-  - **Mode 1**: Computes Sin and Cos
-  - **Mode 2**: Computes Hyperbolic Sine (sinh) and Hyperbolic Cosine (cosh)
-  - **Mode 3**: Computes Hyperbolic Tangent (tanh)
-  - **Mode 4**: Computes Arcsin and Arccos
-  - **Mode 5**: Computes Exponential (exp)
-  - **Mode 6**: Computes Natural Logarithm (ln)
-  - **Mode 7**: Computes Square Root (sqrt)
-  - **Mode 8**: Computes Arctan
+  - **Mode 1**  : Computes Sin 
+  - **Mode 2**  : Computes Hyperbolic Sine (sinh)
+  - **Mode 3**  : Computes Hyperbolic Tangent (tanh)
+  - **Mode 4**  : Computes Arcsin 
+  - **Mode 5**  : Computes Exponential (exp)
+  - **Mode 6**  : Computes Natural Logarithm (ln)
+  - **Mode 7**  : Computes Square Root (sqrt)
+  - **Mode 8**  : Computes Arctan
+  - **Mode 9**  : Computes Cos
+  - **Mode 10** : Computes Hyperbolic Cosine (cosh)
+  - **Mode 11** : Computes Arccos
 
 ### Output Frame Format
 As per the design, the output frame received on the terminal (through RAH communication) follows this format:

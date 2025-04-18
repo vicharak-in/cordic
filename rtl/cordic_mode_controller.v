@@ -23,8 +23,7 @@ reg [1:0]  count = 0;
 reg [7:0]  mode = 0;
 reg [47:0] rdata = 0;
 reg [1:0]  rd_state = 0;
-reg [1:0]  wr_count = 0; 
-reg [63:0] out_data = 0;
+reg [47:0] out_data = 0;
 reg [31:0] out_data_tan = 0;
 reg [2:0]  wr_state = 0; 
 
@@ -119,42 +118,48 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
-    if (mode == 1 || mode == 2 || mode == 4) begin
+    if (mode == 1 || mode == 2 || mode == 4 || mode == 9 || mode == 10 || mode == 11) begin
         case (wr_state)
             W_IDLE: begin 
                 wr_en <= 0;
                 wr_data <= 0;
                 if (mode == 1) begin
                     if (o_done_1) begin
-                        out_data <= {o_cos,o_sin};
+                        out_data <= {16'h000a,o_sin};
                         wr_state <= W_SEND;
                     end
                 end else if (mode == 2) begin
                     if (o_done_2) begin
-                        out_data <= {o_cosh,o_sinh};
+                        out_data <= {16'h000a,o_sinh};
                         wr_state <= W_SEND;
                     end
+                end else if (mode == 4)begin
+                    if (o_done_4) begin
+                        out_data <= {16'h000a,o_arcsin};
+                        wr_state <= W_SEND;
+                    end 
+                end else if (mode == 9)begin
+                    if (o_done_1) begin
+                        out_data <= {16'h000c,o_cos};
+                        wr_state <= W_SEND;
+                    end 
+                end  else if (mode == 10)begin
+                    if (o_done_2) begin
+                        out_data <= {16'h000c,o_cosh};
+                        wr_state <= W_SEND;
+                    end 
                 end else begin
                     if (o_done_4) begin
-                        out_data <= {o_arccos,o_arcsin};
+                        out_data <= {16'h000c,o_arccos};
                         wr_state <= W_SEND;
                     end 
                 end 
             end 
 
             W_SEND: begin
-                case (wr_count)
-                    0: begin
-                        wr_data <= {16'h000a, out_data[31:0]}; //sin
-                        wr_count <= wr_count + 1;
-                        wr_en <= 1;
-                    end
-                    1: begin
-                        wr_data <= {16'h000c, out_data[63:32]}; //cos
-                        wr_count <= 0;
-                        wr_state <= W_IDLE;
-                    end
-                endcase
+                wr_data <= out_data; //sin
+                wr_en <= 1;
+                wr_state <= W_IDLE;
             end
         endcase
     end 
@@ -166,29 +171,14 @@ always @(posedge clk) begin
                 wr_data <= 0;
                 if (o_done_3) begin
                     out_data_tan <= o_tanh;
-                    out_data <= {o_cosht,o_sinht};
                     wr_state <= W_SEND;
                 end
             end 
 
             W_SEND: begin
-                case (wr_count)
-                    0: begin
-                        wr_data <= {16'h000a, out_data[31:0]}; //sin
-                        wr_count <= wr_count + 1;
-                        wr_en <= 1;
-                    end
-                    1: begin
-                        wr_data <= {16'h000c, out_data[63:32]}; //cos
-                        wr_count <= wr_count + 1;
-                    end
-                    2: begin
-                        wr_data <= {16'h000b, out_data_tan}; //tanh
-                        wr_count <= 0;
-                        wr_state <= W_IDLE;
-                    end
-                endcase
-            end
+                wr_data <= {16'h000b,out_data_tan}; //tanh
+                wr_state <= W_IDLE;
+           end
         endcase
     end 
     
@@ -228,7 +218,6 @@ always @(posedge clk) begin
                 else if (mode == 6) wr_data <= {16'h000f, out_data_tan};//ln
                 else if (mode == 7) wr_data <= {16'h000d, out_data_tan}; // sqrt
                 else wr_data <= {16'h000b, out_data_tan}; //arctan
-                wr_count <= 0;
                 wr_en <= 1;
                 wr_state <= W_IDLE;
             end
@@ -239,10 +228,10 @@ always @(posedge clk) begin
     end 
 end
 
-assign i_call_1 = (mode == 1) ? i_call: 0;
-assign i_call_2 = (mode == 2) ? i_call: 0;
+assign i_call_1 = ((mode == 1) || (mode == 9)) ? i_call: 0;
+assign i_call_2 = ((mode == 2) || (mode == 10)) ? i_call: 0;
 assign i_call_3 = (mode == 3) ? i_call: 0;
-assign i_call_4 = (mode == 4) ? i_call: 0;
+assign i_call_4 = ((mode == 4) || (mode == 11)) ? i_call: 0;
 assign i_call_5 = (mode == 5) ? i_call: 0;
 assign i_call_6 = (mode == 6) ? i_call: 0;
 assign i_call_7 = (mode == 7) ? i_call: 0;
