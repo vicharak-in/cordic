@@ -6,7 +6,7 @@ APPID = 1
 
 denom = 65536
 def input_data_and_mode():
-    global choice 
+    global choice
     global angle
     global ratio
     global exp_in
@@ -26,12 +26,13 @@ def input_data_and_mode():
     print("9. Logarithmic (log)")
     print("10. Square root (sqrt)")
     print("11. Arctangent (atan)")
+    print("12. Exit")
 
     # Get user's choice
     choice = int(input("Enter the number corresponding to the function (1-11): "))
 
     # Ensure the user enters a valid choice
-    if choice not in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]:
+    if choice not in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
         print("Invalid choice. Please select a number between 1 and 11.")
     else:
         # Ask for the angle in degrees for choices 1 and 2
@@ -91,12 +92,13 @@ def input_data_and_mode():
         elif choice == 11:
             ratio1 = float(input("Enter the value of x between [-255, 255]: "))
             ratio2 = float(input("Enter the value of y between [-255, 255]: "))
-        
+
             if ratio1 < -255 or ratio1 > 255 or ratio2 < -255 or ratio2 > 255:
                 print("Invalid input. Please select numbers between -255 and 255.")
             else:
                 input_convertor_arctan(ratio1, ratio2, choice)  # New function for arctan
-
+        elif choice == 12:
+            exit()
 
 def sin_cos_input_convertor(angle,choice):
     byte_array = angle.to_bytes(4, byteorder='big')
@@ -143,7 +145,7 @@ def data_packeting_arctan(byte_array1, byte_array2, choice):
     mode = 8  # Mode for arctan
 
     mode_byte = mode.to_bytes(2, byteorder='big')
-    data_in = mode_byte + byte_array1 + mode_byte + byte_array2  
+    data_in = mode_byte + byte_array1 + mode_byte + byte_array2
     transfer_data(data_in)
 
 def transfer_data(data_in):
@@ -158,62 +160,62 @@ def receive_data():
         data_transformer(data_hex)
 
 def data_transformer(hex_data):
-    global denom
-    global choice 
-    global angle
-    global ratio
-    global exp_in
-    global log_in
-    global ratio1
-    global ratio2
+    global denom, choice, angle, ratio, exp_in, log_in, ratio1, ratio2
 
     mode_sel_hex = hex_data[2:4]  # First 2 bytes
-    hex_data = hex_data[4:]  # Remaining 4 bytes
-    mode_sel = int(mode_sel_hex,16)
+    hex_data = hex_data[4:]      # Remaining 4 bytes
+    mode_sel = int(mode_sel_hex, 16)
     data = int(hex_data, 16)
 
+    output_given = False  # Flag to track if any condition was met
+
     if choice == 1 and mode_sel == 10:
-        out_angle = data/denom
-        print("The output of sin",angle,"is:",out_angle)
+        print("The output of sin", angle, "is:", data / denom)
+        output_given = True
     elif choice == 2 and mode_sel == 12:
-        out_angle = data/denom
-        print("The output of cos",angle,"is:",out_angle)
-
-    if choice == 3 and mode_sel == 10:
-        out_angle = data/denom
-        print("the output of sinh",angle,"is:",out_angle)
+        print("The output of cos", angle, "is:", data / denom)
+        output_given = True
+    elif choice == 3 and mode_sel == 10:
+        print("The output of sinh", angle, "is:", data / denom)
+        output_given = True
     elif choice == 4 and mode_sel == 10:
-        out_angle = data/denom
-        print("The output of cos",angle,"is:",out_angle)
-
-    if choice == 5 and mode_sel == 11:
-        out_angle = data/denom
-        print("the output of tahh",angle,"is:",out_angle)
-
-    if choice == 6 and mode_sel == 10:
-        out_ratio = data/denom
-        print("the output of arcsin",ratio,"is:",out_ratio)
+        print("The output of cos", angle, "is:", data / denom)
+        output_given = True
+    elif choice == 5 and mode_sel == 11:
+        print("The output of tanh", angle, "is:", data / denom)
+        output_given = True
+    elif choice == 6 and mode_sel == 10:
+        print("The output of arcsin", ratio, "is:", data / denom)
+        output_given = True
     elif choice == 7 and mode_sel == 12:
-        out_ratio = data/denom
-        print("The output of arccos",ratio,"is:",out_ratio)
-
+        print("The output of arccos", ratio, "is:", data / denom)
+        output_given = True
     elif choice == 8 and mode_sel == 14:
-        out_exp = data
-        print("The output of exp",exp_in,"is:",out_exp)
-
-    if choice == 9 and mode_sel == 15:
-        out_log = data/denom
-        print("the output of a log",log_in,"is:",out_log)
+        print("The output of exp", exp_in, "is:", data)
+        output_given = True
+    elif choice == 9 and mode_sel == 15:
+        print("The output of a log", log_in, "is:", data / denom)
+        output_given = True
     elif choice == 10 and mode_sel == 13:
-        out_log = data/denom
-        print("The output of log",log_in,"is:",out_log)
-
+        print("The output of log", log_in, "is:", data / denom)
+        output_given = True
     elif choice == 11 and mode_sel == 11:
-        out_ratio = data/denom
-        print("the output of a arctan for x=",ratio1,"and y=",ratio2,"is:",out_ratio)
+        print("The output of arctan for x =", ratio1, "and y =", ratio2, "is:", data / denom)
+        output_given = True
+
+    if output_given:
+        receive_data()
+
 
 def main():
     receive_data()
 
 if __name__ == "__main__":
     main()
+~
+~
+~
+~
+~
+~
+~
