@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- Copyright (C) 2013-2023 Efinix Inc. All rights reserved.              
+-- Copyright (C) 2013-2024 Efinix Inc. All rights reserved.              
 --
 -- This   document  contains  proprietary information  which   is        
 -- protected by  copyright. All rights  are reserved.  This notice       
@@ -37,32 +37,35 @@
 --
 --------------------------------------------------------------------------------
 ------------- Begin Cut here for COMPONENT Declaration ------
-COMPONENT cordic_sinh_cosh is
-PORT (
-clk : in std_logic;
-reset_n : in std_logic;
-i_call : in std_logic;
-i_data : in std_logic_vector(31 downto 0);
-o_done : out std_logic;
-o_cosh : out std_logic_vector(31 downto 0);
-o_sinh : out std_logic_vector(31 downto 0);
-o_alpha : out std_logic_vector(31 downto 0);
-o_y : out std_logic_vector(31 downto 0);
-o_x : out std_logic_vector(31 downto 0));
-END COMPONENT;
----------------------- End COMPONENT Declaration ------------
+component cordic_sinh_cosh is
+port (
+    clk : in std_logic;
+    reset_n : in std_logic;
+    i_call : in std_logic;
+    i_data : in std_logic_vector(31 downto 0);
+    o_done : out std_logic;
+    o_cosh : out std_logic_vector(31 downto 0);
+    o_sinh : out std_logic_vector(31 downto 0);
+    o_alpha : out std_logic_vector(31 downto 0);
+    o_y : out std_logic_vector(31 downto 0);
+    o_x : out std_logic_vector(31 downto 0)
+);
+end component cordic_sinh_cosh;
 
+---------------------- End COMPONENT Declaration ------------
 ------------- Begin Cut here for INSTANTIATION Template -----
 u_cordic_sinh_cosh : cordic_sinh_cosh
-PORT MAP (
-clk => clk,
-reset_n => reset_n,
-i_call => i_call,
-i_data => i_data,
-o_done => o_done,
-o_cosh => o_cosh,
-o_sinh => o_sinh,
-o_alpha => o_alpha,
-o_y => o_y,
-o_x => o_x);
+port map (
+    clk => clk,
+    reset_n => reset_n,
+    i_call => i_call,
+    i_data => i_data,
+    o_done => o_done,
+    o_cosh => o_cosh,
+    o_sinh => o_sinh,
+    o_alpha => o_alpha,
+    o_y => o_y,
+    o_x => o_x
+);
+
 ------------------------ End INSTANTIATION Template ---------

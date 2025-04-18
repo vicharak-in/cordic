@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- Copyright (C) 2013-2023 Efinix Inc. All rights reserved.              
+-- Copyright (C) 2013-2024 Efinix Inc. All rights reserved.              
 --
 -- This   document  contains  proprietary information  which   is        
 -- protected by  copyright. All rights  are reserved.  This notice       
@@ -37,32 +37,35 @@
 --
 --------------------------------------------------------------------------------
 ------------- Begin Cut here for COMPONENT Declaration ------
-COMPONENT cordic_arctan is
-PORT (
-clk : in std_logic;
-reset_n : in std_logic;
-i_call : in std_logic;
-i_x : in std_logic_vector(31 downto 0);
-i_y : in std_logic_vector(31 downto 0);
-o_done : out std_logic;
-o_arctan : out std_logic_vector(31 downto 0);
-o_deg : out std_logic_vector(31 downto 0);
-o_y : out std_logic_vector(31 downto 0);
-o_x : out std_logic_vector(31 downto 0));
-END COMPONENT;
----------------------- End COMPONENT Declaration ------------
+component cordic_arctan is
+port (
+    clk : in std_logic;
+    reset_n : in std_logic;
+    i_call : in std_logic;
+    i_x : in std_logic_vector(31 downto 0);
+    i_y : in std_logic_vector(31 downto 0);
+    o_done : out std_logic;
+    o_arctan : out std_logic_vector(31 downto 0);
+    o_deg : out std_logic_vector(31 downto 0);
+    o_y : out std_logic_vector(31 downto 0);
+    o_x : out std_logic_vector(31 downto 0)
+);
+end component cordic_arctan;
 
+---------------------- End COMPONENT Declaration ------------
 ------------- Begin Cut here for INSTANTIATION Template -----
 u_cordic_arctan : cordic_arctan
-PORT MAP (
-clk => clk,
-reset_n => reset_n,
-i_call => i_call,
-i_x => i_x,
-i_y => i_y,
-o_done => o_done,
-o_arctan => o_arctan,
-o_deg => o_deg,
-o_y => o_y,
-o_x => o_x);
+port map (
+    clk => clk,
+    reset_n => reset_n,
+    i_call => i_call,
+    i_x => i_x,
+    i_y => i_y,
+    o_done => o_done,
+    o_arctan => o_arctan,
+    o_deg => o_deg,
+    o_y => o_y,
+    o_x => o_x
+);
+
 ------------------------ End INSTANTIATION Template ---------
