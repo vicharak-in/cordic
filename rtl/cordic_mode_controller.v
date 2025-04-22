@@ -84,8 +84,8 @@ always @(posedge clk) begin
             if (rdata[39:32] == 8) begin
                 if (!count) begin
                     i_data <= rdata[31:0];
-                    count <= 1;
                     rd_state <= RD_IDLE;
+                    count <= 1;
                 end else if (count == 1) begin
                     i_data2 <= rdata[31:0];
                     i_call <= 1;
@@ -178,6 +178,7 @@ always @(posedge clk) begin
             W_SEND: begin
                 wr_data <= {16'h000b,out_data_tan}; //tanh
                 wr_state <= W_IDLE;
+                wr_en <= 1;
            end
         endcase
     end 
