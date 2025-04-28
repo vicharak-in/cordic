@@ -5,6 +5,20 @@ import pyrah
 APPID = 1
 denom = 65536
 
+def safe_input(prompt, convert_func=int, valid_range=None):
+    while True:
+        try:
+            user_input = convert_func(input(prompt))
+            if valid_range and not (valid_range[0] <= user_input <= valid_range[1]):
+                print(f"Invalid input. Please enter a value between {valid_range[0]} and {valid_range[1]}.\n")
+                continue
+            return user_input
+        except ValueError:
+            print("Invalid input. Please enter a valid number.\n")
+        except (KeyboardInterrupt, EOFError):
+            print("\n")
+            exit()
+
 def input_data_and_mode():
     global choice
     global angle
@@ -14,96 +28,64 @@ def input_data_and_mode():
     global ratio1
     global ratio2
 
+    print("\n=== Welcome to the Trigonometric Calculator ===\n")
     print("Select the trigonometric function you want to calculate:")
     print("1. Sine (sin)")
-    print("2. Sinh (sinh)")
-    print("3. Tanh (tanh)")
-    print("4. Arcsine (asin)")
-    print("5. Exponential (exp)")
-    print("6. Logarithmic (log)")
-    print("7. Square root (sqrt)")
-    print("8. Arctangent (atan)")
-    print("9. Cosine (cos)")
-    print("10. Cosh (cosh)")
-    print("11. Arccosine (acos)")
-    print("12. Exit")
+    print("2. Cosine (cos)")
+    print("3. Sinh (sinh)")
+    print("4. Cosh (cosh)")
+    print("5. Tanh (tanh)")
+    print("6. Arcsine (asin)")
+    print("7. Arccosine (acos)")
+    print("8. Exponential (exp)")
+    print("9. Logarithmic (log)")
+    print("10. Square root (sqrt)")
+    print("11. Arctangent (atan)")
+    print("12. Exit\n")
 
-    choice = int(input("Enter the number corresponding to the function (1-12): "))
+    in_choice = safe_input("Enter the number corresponding to the function (1-12): ", int, (1, 12))
 
-    if choice == 12:
-        print("Exiting.")
+    if in_choice == 12:
+        print("\nThank you for using the Trigonometric Calculator.")
         exit()
 
-    if choice == 1:
-        angle = int(input("Enter the angle in degrees between [0, 360]: "))
-        if 0 <= angle <= 360:
-            sin_cos_input_convertor(angle, choice)
-        else:
-            print("Invalid input.")
+    print("\nYou selected option:", in_choice)
 
-    elif choice == 2:
-        angle = float(input("Enter the angle in radians between [0, 3.142]: "))
-        if 0 <= angle <= 3.142:
-            input_convertor(angle, choice)
-        else:
-            print("Invalid input.")
+    if in_choice == 1 or in_choice == 2:
+        angle = safe_input("Enter the angle in degrees between [0, 360]: ", int, (0, 360))
+        choice = 1 if in_choice == 1 else 9
+        sin_cos_input_convertor(angle, choice)
 
-    elif choice == 3:
-        angle = float(input("Enter the angle in radians between [0, 1.13]: "))
-        if 0 <= angle <= 1.13:
-            input_convertor(angle, choice)
-        else:
-            print("Invalid input.")
+    elif in_choice == 3 or in_choice == 4:
+        angle = safe_input("Enter the angle in radians between [-3.142, 3.142]: ", float, (-3.142, 3.142))
+        choice = 2 if in_choice == 3 else 10
+        input_convertor(angle, choice)
 
-    elif choice == 4:
-        ratio = float(input("Enter the ratio between [0, 1]: "))
-        if 0 <= ratio <= 1:
-            input_convertor(ratio, choice)
-        else:
-            print("Invalid input.")
+    elif in_choice == 5:
+        angle = safe_input("Enter the angle in radians between [-1.13, 1.13]: ", float, (-1, 1.13))
+        choice = 3
+        input_convertor(angle, choice)
 
-    elif choice == 5:
-        exp_in = float(input("Enter the exponent in range [0, 10]: "))
-        if 0 <= exp_in <= 10:
-            input_convertor(exp_in, choice)
-        else:
-            print("Invalid input.")
+    elif in_choice == 6 or in_choice == 7:
+        ratio = safe_input("Enter the ratio between [-1, 1]: ", float, (-1, 1))
+        choice = 4 if in_choice == 6 else 11
+        input_convertor(ratio, choice)
 
-    elif choice in [6, 7]:
-        log_in = float(input("Enter the input in range [0, 30000]: "))
-        if 0 <= log_in <= 30000:
-            input_convertor(log_in, choice)
-        else:
-            print("Invalid input.")
+    elif in_choice == 8:
+        exp_in = safe_input("Enter the exponent in range [-10, 10]: ", float, (10, 10))
+        choice = 5
+        input_convertor(exp_in, choice)
 
-    elif choice == 8:
-        ratio1 = float(input("Enter the value of x between [0, 255]: "))
-        ratio2 = float(input("Enter the value of y between [0, 255]: "))
-        if 0 <= ratio1 <= 255 and 0 <= ratio2 <= 255:
-            input_convertor_arctan(ratio1, ratio2, choice)
-        else:
-            print("Invalid input.")
+    elif in_choice == 9 or in_choice == 10:
+        log_in = safe_input("Enter the input in range [1, 30000]: ", float, (1, 30000))
+        choice = 6 if in_choice == 9 else 7
+        input_convertor(log_in, choice)
 
-    elif choice == 9:
-        angle = int(input("Enter the angle in degrees between [0, 360]: "))
-        if 0 <= angle <= 360:
-            sin_cos_input_convertor(angle, choice)
-        else:
-            print("Invalid input.")
-
-    elif choice == 10:
-        angle = float(input("Enter the angle in radians between [0, 3.142]: "))
-        if 0 <= angle <= 3.142:
-            input_convertor(angle, choice)
-        else:
-            print("Invalid input.")
-
-    elif choice == 11:
-        ratio = float(input("Enter the ratio between [0, 1]: "))
-        if 0 <= ratio <= 1:
-            input_convertor(ratio, choice)
-        else:
-            print("Invalid input.")
+    elif in_choice == 11:
+        ratio1 = safe_input("Enter the value of x between [-255, 255]: ", float, (-255, 255))
+        ratio2 = safe_input("Enter the value of y between [-255, 255]: ", float, (-255, 255))
+        choice = 8
+        input_convertor_arctan(ratio1, ratio2, choice)
 
 def sin_cos_input_convertor(angle, choice):
     byte_array = angle.to_bytes(4, byteorder='big', signed=False)
@@ -135,10 +117,12 @@ def data_packeting_arctan(byte_array1, byte_array2, choice):
     transfer_data(data_in)
 
 def transfer_data(data_in):
+    print(data_in)
     pyrah.rah_write(APPID, data_in)
 
 def receive_data():
     data = pyrah.rah_read(APPID, 6)
+    print(data)
     data_hex = data.hex()
     data_transformer(data_hex)
 
@@ -157,34 +141,41 @@ def data_transformer(hex_data):
 
     out_val = data / denom
 
+    print("\n=== Result ===")
     if choice == 1:
-        print("The output of sin", angle, "is:", out_val)
+        print(f"The output of sin({angle}°) is: {out_val}")
     elif choice == 2:
-        print("The output of sinh", angle, "is:", out_val)
+        print(f"The output of sinh({angle} rad) is: {out_val}")
     elif choice == 3:
-        print("The output of tanh", angle, "is:", out_val)
+        print(f"The output of tanh({angle} rad) is: {out_val}")
     elif choice == 4:
-        print("The output of asin", ratio, "is:", out_val)
+        print(f"The output of asin({ratio}) is: {out_val}")
     elif choice == 5:
-        print("The output of exp", exp_in, "is:", data)
+        print(f"The output of exp({exp_in}) is: {out_val}")
     elif choice == 6:
-        print("The output of log", log_in, "is:", out_val)
+        print(f"The output of log({log_in}) is: {out_val}")
     elif choice == 7:
-        print("The output of sqrt", log_in, "is:", out_val)
+        print(f"The output of sqrt({log_in}) is: {out_val}")
     elif choice == 8:
-        print("The output of arctan for x =", ratio1, "and y =", ratio2, "is:", out_val)
+        print(f"The output of arctan(y={ratio2}, x={ratio1}) is: {out_val}")
     elif choice == 9:
-        print("The output of cos", angle, "is:", out_val)
+        print(f"The output of cos({angle}°) is: {out_val}")
     elif choice == 10:
-        print("The output of cosh", angle, "is:", out_val)
+        print(f"The output of cosh({angle} rad) is: {out_val}")
     elif choice == 11:
-        print("The output of acos", ratio, "is:", out_val)
+        print(f"The output of acos({ratio}) is: {out_val}")
+    print("=================\n")
 
 def main():
     input_data_and_mode()
     receive_data()
 
 if __name__ == "__main__":
-    while(1):
-        main()
-
+    while True:
+        try:
+            main()
+        except (KeyboardInterrupt, EOFError):
+            break
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}\n")
+            break
